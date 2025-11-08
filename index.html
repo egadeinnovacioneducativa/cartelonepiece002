@@ -70,8 +70,9 @@
                 Repetir Foto
             </button>
 
-            <button id="generate-ai-button" class="w-full py-3 px-6 bg-purple-600 text-white font-bold rounded-lg shadow-md hover:bg-purple-700 transition-all hidden">
-                3. Generar con IA
+            <!-- Botón de descarga restaurado -->
+            <button id="download-photo" class="w-full py-3 px-6 bg-purple-600 text-white font-bold rounded-lg shadow-md hover:bg-purple-700 transition-all hidden">
+                3. Descargar Póster
             </button>
         </div>
     </div>
@@ -79,63 +80,12 @@
     <!-- Canvas oculto para componer la imagen final (póster + foto) -->
     <canvas id="composite-canvas" class="hidden"></canvas>
 
-    <!-- Modal de Gemini para pedir datos y mostrar resultados -->
-    <div id="gemini-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-sm flex flex-col gap-4">
-            
-            <!-- Formulario de Inputs -->
-            <div id="gemini-form">
-                <h3 class="text-xl font-bold mb-4 text-center">Datos del Pirata</h3>
-                <div>
-                    <label for="name-input" class="block text-sm font-medium text-gray-300 mb-1">Nombre del Pirata:</label>
-                    <input type="text" id="name-input" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Ej: Monkey D. Luffy">
-                </div>
-                <div>
-                    <label for="bounty-input" class="block text-sm font-medium text-gray-300 mb-1">Recompensa:</label>
-                    <input type="text" id="bounty-input" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Ej: 3,000,000,000 Berries">
-                </div>
-                <div>
-                    <label for="pirate-type-input" class="block text-sm font-medium text-gray-300 mb-1">Descripción del Pirata:</label>
-                    <input type="text" id="pirate-type-input" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Ej: Capitán alegre con poder eléctrico">
-                </div>
-                <div class="mt-6 flex flex-col gap-2">
-                    <button id="confirm-generate-button" class="w-full py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">Confirmar y Generar</button>
-                    <button id="cancel-modal-button" class="w-full py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Cancelar</button>
-                </div>
-            </div>
-
-            <!-- Vista de Carga -->
-            <div id="gemini-loading" class="text-center hidden">
-                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                <p class="text-lg">Generando tu imagen pirata...</p>
-                <p class="text-sm text-gray-400">Esto puede tardar un momento.</p>
-            </div>
-
-            <!-- Vista de Resultado -->
-            <div id="gemini-result" class="text-center hidden">
-                <h3 class="text-xl font-bold mb-4">¡Imagen Generada!</h3>
-                <div id="generated-image-container" class="mb-4 border-2 border-gray-600 rounded-lg overflow-hidden">
-                    <!-- La imagen generada por IA irá aquí -->
-                </div>
-                <div class="flex flex-col gap-2">
-                    <button id="download-generated-button" class_exists="" class="w-full py-2 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700">Descargar Imagen</button>
-                    <button id="restart-app-button" class="w-full py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Volver a Empezar</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
+    <!-- Modal de Gemini eliminado -->
 
     <script>
         // --- INICIO DEL SCRIPT COMPLETO ---
 
-        // -----------------------------------------------------------------
-        // ¡IMPORTANTE!
-        // Pega tu clave de API de Google AI Studio aquí
-        const apiKey = "AIzaSyC17ez7jZqiUtaDjcvO2nKstlvYcVumrws"; // <--- Pega tu API Key entre las comillas
-        // -----------------------------------------------------------------
-
+        // API Key eliminada
 
         // --- Selectores de Elementos del DOM ---
         const videoFeed = document.getElementById('video-feed');
@@ -147,39 +97,18 @@
         const startButton = document.getElementById('start-camera');
         const takePhotoButton = document.getElementById('take-photo');
         const retakeButton = document.getElementById('retake-photo');
-        const generateAIButton = document.getElementById('generate-ai-button'); // Botón actualizado
+        const downloadButton = document.getElementById('download-photo'); // Botón de descarga
         const switchButton = document.getElementById('switch-camera');
         const messageBox = document.getElementById('message-box');
 
-        // --- Selectores del Modal de Gemini ---
-        const geminiModal = document.getElementById('gemini-modal');
-        const geminiForm = document.getElementById('gemini-form');
-        const geminiLoading = document.getElementById('gemini-loading');
-        const geminiResult = document.getElementById('gemini-result');
-        
-        const nameInput = document.getElementById('name-input');
-        const bountyInput = document.getElementById('bounty-input');
-        const pirateTypeInput = document.getElementById('pirate-type-input');
-        
-        const confirmGenerateButton = document.getElementById('confirm-generate-button');
-        const cancelModalButton = document.getElementById('cancel-modal-button');
-        const generatedImageContainer = document.getElementById('generated-image-container');
-        const downloadGeneratedButton = document.getElementById('download-generated-button');
-        const restartAppButton = document.getElementById('restart-app-button');
+        // Selectores de Modal eliminados
 
         // --- Variables Globales ---
         let currentStream = null;
         let currentFacingMode = 'user';
-        let compositeImageBase64 = null; // Guardará la imagen compuesta (foto + póster)
-        let generatedImageUrl = null; // Guardará la URL de la imagen de Gemini
+        // Variables de IA eliminadas
 
-        // --- Prompt del Sistema para Gemini (proporcionado por el usuario) ---
-        const systemPrompt = `Se te presentará la imagen de un cartel de recompensa. Debes responder generando una imagen con estas características:
-
-Debes transformar la foto del cartel en animación tipo anime de One Piece. Debes transformar a la foto en piratas divertidos, cambia la foto temáticamente a piratas a menos de que se te indique otra cosa. Varía temáticamente a los piratas -como pirata con poder eléctrico, pirata con espada, pirata navegante- Estiliza la imagen para que se vean un poco más atléticos.
-
-Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la recompensa que se pide (puede ser una cifra y una descripción, como "1,000,000" o "2 tortas"). Escribe en la parte asignada del cartel de recompensa el nombre y debajo la recompensa que se pide.`;
-
+        // Prompt de IA eliminado
 
         // --- 1. Iniciar la Cámara ---
         async function startCamera(facingMode = 'user') {
@@ -215,7 +144,7 @@ Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la r
                 takePhotoButton.classList.remove('hidden');
                 switchButton.classList.remove('hidden');
                 retakeButton.classList.add('hidden');
-                generateAIButton.classList.add('hidden'); // Ocultar botón de IA
+                downloadButton.classList.add('hidden'); // Ocultar botón de descarga
 
             } catch (err) {
                 console.error('Error al acceder a la cámara:', err);
@@ -257,7 +186,7 @@ Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la r
             takePhotoButton.classList.add('hidden');
             switchButton.classList.add('hidden');
             retakeButton.classList.remove('hidden');
-            generateAIButton.classList.remove('hidden'); // Mostrar botón de IA
+            downloadButton.classList.remove('hidden'); // Mostrar botón de descarga
         }
 
         // --- 3. Repetir la Foto ---
@@ -273,21 +202,22 @@ Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la r
             startCamera(currentFacingMode);
         }
         
-        // --- 5. Mostrar Modal de Gemini (antes era downloadPhoto) ---
-        function showGeminiModal() {
-            showMessage('Preparando imagen...');
+        // --- 5. Descargar el Póster Compuesto (Función restaurada) ---
+        function downloadPhoto() {
+            showMessage('Generando póster...');
             
             const posterImg = new Image();
             posterImg.crossOrigin = "Anonymous"; 
             posterImg.src = 'https://i.imgur.com/nT1tuVB.png';
             
             posterImg.onload = () => {
-                // 1. Crear la imagen compuesta en el canvas oculto
+                // 1. Ajustamos el canvas de composición al tamaño real del póster
                 const posterWidth = posterImg.width;
                 const posterHeight = posterImg.height;
                 compositeCanvas.width = posterWidth;
                 compositeCanvas.height = posterHeight;
 
+                // --- Lógica de "object-cover" para la foto ---
                 const canvasAspect = posterWidth / posterHeight;
                 const photoAspect = photoCanvas.width / photoCanvas.height;
                 
@@ -300,173 +230,36 @@ Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la r
                     sHeight = photoCanvas.width / canvasAspect;
                     sy = (photoCanvas.height - sHeight) / 2;
                 }
+                // --- Fin lógica "object-cover" ---
 
-                // Dibujar foto de fondo (espejada)
+                // 2. Dibujamos la foto CAPTURADA (del photoCanvas) como fondo
+                // La dibujamos espejada para que coincida con la vista previa
                 compositeCtx.save();
-                compositeCtx.translate(posterWidth, 0);
-                compositeCtx.scale(-1, 1);
+                compositeCtx.translate(posterWidth, 0); // Mover al borde derecho
+                compositeCtx.scale(-1, 1); // Espejar horizontalmente
                 compositeCtx.drawImage(photoCanvas, sx, sy, sWidth, sHeight, 0, 0, posterWidth, posterHeight);
-                compositeCtx.restore();
+                compositeCtx.restore(); // Quitar espejado
 
-                // Dibujar póster encima
+                // 3. Dibujamos el PÓSTER (con su hueco transparente) ENCIMA de la foto
                 compositeCtx.drawImage(posterImg, 0, 0, posterWidth, posterHeight);
 
-                // 2. Guardar la imagen como Base64
-                compositeImageBase64 = compositeCanvas.toDataURL('image/png');
+                // 4. Creamos el enlace de descarga
+                const link = document.createElement('a');
+                link.download = 'mi-poster-se-busca.png';
+                link.href = compositeCanvas.toDataURL('image/png');
+                link.click();
                 
-                // 3. Mostrar el modal
-                geminiModal.classList.remove('hidden');
-                geminiForm.classList.remove('hidden');
-                geminiLoading.classList.add('hidden');
-                geminiResult.classList.add('hidden');
-                showMessage(''); // Limpiar mensaje principal
+                showMessage('¡Póster descargado!');
             };
             
             posterImg.onerror = () => {
                 showMessage('Error: No se pudo cargar la imagen del póster.');
+                console.error("Error: Asegúrate de que la URL de la imagen sea correcta y accesible.");
             }
         }
 
-        // --- 6. Manejar la Generación de Gemini ---
-        async function handleGeneration() {
-            if (!apiKey) {
-                showMessage('Error: API Key no encontrada.');
-                hideGeminiModal(); // Opcional: ocultar modal si no hay clave
-                return;
-            }
+        // Funciones de IA eliminadas
 
-            if (!compositeImageBase64) {
-                alert("Error: No se ha capturado la imagen base.");
-                return;
-            }
-
-            const name = nameInput.value || "Pirata Desconocido";
-            const bounty = bountyInput.value || "100 Berries";
-            const pirateType = pirateTypeInput.value || "pirata divertido";
-
-            // Ocultar formulario, mostrar carga
-            geminiForm.classList.add('hidden');
-            geminiLoading.classList.remove('hidden');
-
-            // Construir el prompt del usuario
-            const userPrompt = `Transforma esta imagen. Nombre: ${name}, Recompensa: ${bounty}, Tipo de Pirata: ${pirateType}.`;
-
-            // Modelo para edición de imágenes
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: userPrompt },
-                        {
-                            inlineData: {
-                                mimeType: "image/png",
-                                data: compositeImageBase64.split(',')[1] // Quitar el prefijo "data:image/png;base64,"
-                            }
-                        }
-                    ]
-                }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                generationConfig: {
-                    responseModalities: ['TEXT', 'IMAGE'] // Pedimos una imagen de vuelta
-                },
-            };
-
-            try {
-                const response = await retryWithBackoff(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error de API: ${response.statusText}`);
-                }
-
-                const result = await response.json();
-                processApiResponse(result);
-
-            } catch (error) {
-                console.error("Error llamando a Gemini:", error);
-                geminiLoading.classList.add('hidden');
-                geminiForm.classList.remove('hidden'); // Mostrar formulario de nuevo
-                alert(`Error al generar la imagen: ${error.message}. Revisa la consola.`);
-            }
-        }
-
-        // --- 7. Procesar la respuesta de Gemini ---
-        function processApiResponse(result) {
-            try {
-                const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-                
-                if (base64Data) {
-                    generatedImageUrl = `data:image/png;base64,${base64Data}`;
-                    
-                    // Mostrar la imagen
-                    generatedImageContainer.innerHTML = `<img src="${generatedImageUrl}" alt="Imagen generada por IA" class="w-full h-auto rounded-lg">`;
-                    
-                    // Ocultar carga, mostrar resultado
-                    geminiLoading.classList.add('hidden');
-                    geminiResult.classList.remove('hidden');
-                } else {
-                    throw new Error("Respuesta de API inesperada. No se encontró imagen.");
-                }
-            } catch (error) {
-                console.error("Error procesando respuesta:", error, result);
-                geminiLoading.classList.add('hidden');
-                geminiForm.classList.remove('hidden');
-                alert(`Error al procesar la imagen generada: ${error.message}`);
-            }
-        }
-
-        // --- 8. Funciones Auxiliares del Modal ---
-        function hideGeminiModal() {
-            geminiModal.classList.add('hidden');
-            // Resetear el modal para la próxima vez
-            nameInput.value = '';
-            bountyInput.value = '';
-            pirateTypeInput.value = '';
-            generatedImageContainer.innerHTML = '';
-            generatedImageUrl = null;
-            compositeImageBase64 = null;
-        }
-
-        function downloadGeneratedImage() {
-            if (generatedImageUrl) {
-                const link = document.createElement('a');
-                link.download = 'mi-pirata-ia.png';
-                link.href = generatedImageUrl;
-                link.click();
-            }
-        }
-
-        function restartApp() {
-            hideGeminiModal();
-            retakePhoto(); // Reiniciar la cámara
-        }
-
-        // --- 9. Manejador de reintentos (Exponential Backoff) ---
-        async function retryWithBackoff(url, options, retries = 3, delay = 1000) {
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status === 429 || response.status >= 500) {
-                        // Error de servidor o "Too Many Requests", reintentar
-                        throw new Error(`Server error: ${response.status}`);
-                    }
-                    return response; // Éxito
-                } catch (error) {
-                    if (i === retries - 1) throw error; // Último intento fallido
-                    // No registrar en consola para evitar "ruido"
-                    // console.log(`Retrying (${i+1}/${retries})...`);
-                    await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
-                }
-            }
-        }
-
-        
         // --- Función de utilidad para mensajes ---
         function showMessage(msg) {
             messageBox.textContent = msg;
@@ -483,13 +276,9 @@ Se te dará el nombre que debes escribir en la parte de abajo del cartel, y la r
         takePhotoButton.addEventListener('click', takePhoto);
         retakeButton.addEventListener('click', retakePhoto);
         switchButton.addEventListener('click', switchCamera);
-        generateAIButton.addEventListener('click', showGeminiModal); // Evento actualizado
+        downloadButton.addEventListener('click', downloadPhoto); // Evento de descarga restaurado
 
-        // --- Eventos del Modal ---
-        cancelModalButton.addEventListener('click', hideGeminiModal);
-        confirmGenerateButton.addEventListener('click', handleGeneration);
-        downloadGeneratedButton.addEventListener('click', downloadGeneratedImage);
-        restartAppButton.addEventListener('click', restartApp);
+        // Eventos de Modal eliminados
 
     </script>
 </body>
